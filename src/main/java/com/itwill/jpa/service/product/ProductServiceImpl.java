@@ -44,29 +44,40 @@ public class ProductServiceImpl implements ProductService{
 	public Product getProduct(Long productNo) {
 		return productRepository.findById(productNo).get();
 	}
-	@Override
-	public ProductDto getProductDto(Long productNo) {
-		return productRepository.findByIdDto(productNo).get();
-	}
+//	@Override
+//	public ProductDto getProductDto(Long productNo) {
+//		return productRepository.findByIdDto(productNo).get();
+//	}
 	
 	// categoryId값 가져오기	
 	@Override	
 	public List<Product> getProductsByCategory(Long categoryId) {
 		return productRepository.findByProductCategoryId(categoryId);
 	}
-	
-	
+//	@Override
+//	public List<ProductDto> getProductsByCategorysDtos(Long categoryId) {
+//		return productRepository.findBy;
+//	}
+	@Override
+	public List<Product> productList() {
+		return productRepository.findAll();
+	}
 	/*
 	 * @Override public Product saveProduct(Product product) { return
 	 * productRepository.save(product); }
 	 */
 	
-	
+	//전체 product 출력[DTO]
 	@Override
-	public List<Product> productList() {
-		return productRepository.findAll();
+	public List<ProductDto> productDtoList() {
+		List<Product> productList = productRepository.findAll();
+		List<ProductDto> productDtoList = new ArrayList<ProductDto>();
+		for(Product product : productList) {
+			productDtoList.add(ProductDto.toDto(product));
+		}
+		return productDtoList;
 	}
-	
+		
 	// 좋아요 누르기 기능[성공]
 	@Override
 	public Long checkLikeService(Long productNo) {
@@ -119,10 +130,10 @@ public class ProductServiceImpl implements ProductService{
 /******************** categoryId별로 전체나열[ENTITY] ********************/
 	
 	// product 카테고리별 구분[성공]
-	@Override
-	public List<Product> findByProductCategory(ProductCategory categoryId) {
-		return productRepository.findByProductCategory(categoryId);
-	}
+//	@Override
+//	public List<Product> findByProductCategory(ProductCategory categoryId) {
+//		return productRepository.findByProductCategory(categoryId);
+//	}
 /*************************************************************************/	
 	@Override
 	public List<Product> findByCategoryId(Long categoryId) {
@@ -167,10 +178,10 @@ public class ProductServiceImpl implements ProductService{
     }
 /******************** insert[ENTITY] ********************/	
 	//product 추가[성공]
-	@Override
-	public Product insertProduct(Product product) {
-		return productRepository.save(product);
-	}
+//	@Override
+//	public Product insertProduct(Product product) {
+//		return productRepository.save(product);
+//	}
 	
 	//music 추가[성공]
 	@Override
@@ -219,20 +230,20 @@ public class ProductServiceImpl implements ProductService{
 		productRepository.deleteById(productNo);
 		
 	}
-	
-	//product 삭제[성공]
-	
-	  @Override
-	  public void deleteProduct2(Long productNo) { 
-		  Optional<Product> productOptional = productRepository.findById(productNo);
-	  if(productOptional.isPresent()) { 
-		  Product product = productOptional.get();
-		  productRepository.delete(product); //product 객체 있으면 꺼내서 삭제
-		  }else {	  
-	  //예외처리
-	  }
-		
-	}
+//	
+//	//product 삭제[성공]
+//	
+//	  @Override
+//	  public void deleteProduct2(Long productNo) { 
+//		  Optional<Product> productOptional = productRepository.findById(productNo);
+//	  if(productOptional.isPresent()) { 
+//		  Product product = productOptional.get();
+//		  productRepository.delete(product); //product 객체 있으면 꺼내서 삭제
+//		  }else {	  
+//	  //예외처리
+//	  }
+//		
+//	}
 /******************** DELETE[DTO] ********************/	
 	  
 		// product 삭제 - DTO[성공]
@@ -242,6 +253,14 @@ public class ProductServiceImpl implements ProductService{
 			productRepository.deleteById(productNo);
 			ProductDto productDto = ProductDto.toDto(product);
 			return productDto;
+		}		
+		// product 삭제 - DTO[성공]
+		@Override
+		public GoodsDto deledtGoodsDto(Long productNo) throws Exception {
+			Goods goods = (Goods) productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
+			productRepository.deleteById(productNo);
+			GoodsDto goodsDto = GoodsDto.toDto(goods);
+			return goodsDto;
 		}		
 		/*********************************************/
 		
@@ -393,6 +412,8 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 	
 /*********************************************/	
