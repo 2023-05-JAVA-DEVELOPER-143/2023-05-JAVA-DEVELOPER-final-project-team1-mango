@@ -23,8 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	List<Product> findAll();
 
 // productNo로 찾기
-//	Product findById(Long productNo);
-//	Optional<Product> findById(Long productNo);
+Optional<Product> findById(Long productNo);
+//	Optional<Product> findByIdc
 
 // productNo로 찾기[DTO]	
 	@Query("SELECT p FROM Product p WHERE p.productNo = :productNo")
@@ -52,7 +52,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Query("UPDATE Product p SET p.readCount = p.readCount + 1 WHERE p.productNo = :productNo")
     void increaseReadCount(@Param("productNo") Long productNo);
-	
+// product 삭제
+    void deleteByProductNo(Long productNo);
 	
 	
 /************************ Vote관련  ***************************/	

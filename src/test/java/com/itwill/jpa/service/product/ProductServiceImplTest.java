@@ -187,22 +187,16 @@ class ProductServiceImplTest {
 //		  // 제품 삭제
 //		  productServiceImpl.deleteProduct2(productNo);	  
 //	  }
-	// product 삭제 - DTO로 받기[성공]
-		@Test
-		@Transactional
-		@Rollback(false)
-		@Disabled	 
-		void testDeledtProductDto() throws Exception {
-			productServiceImpl.deledtProductDto(2L);
-		}
-		// product 삭제 - DTO로 받기[성공]
-		@Test
-		@Transactional
-		@Rollback(false)
+	// product 삭제 - DTO로 받기[성공햇다 실패]
+//		@Test
+//		@Transactional
+//		@Rollback(false)
 //		@Disabled	 
-		void testDeledteGoodsDto() throws Exception {
-			productServiceImpl.deledtGoodsDto(3L);
-		}
+//		void testDeledtProductDto() throws Exception {
+//			Long productNo = 2L;
+//			productServiceImpl.deledtProductDto(productNo);
+//		}
+
 	  
 	// product 수정[성공]
 //	@Test
@@ -221,13 +215,17 @@ class ProductServiceImplTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-	@Disabled
+//	@Disabled
 	public void testUpdateProductDto() throws Exception {
-//		Product product = productRepository.findById(2L);
-//		ProductDto productDto = ProductDto.toDto(product);
-//		productDto.setProductName("수정 테스트완료");
-//		ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
-//		System.out.println(updatedProductDto);
+        Long existingProductId = 2L;
+		Optional<Product> productOptional = productRepository.findById(existingProductId);
+		if(productOptional.isPresent()) {
+			Product product = productOptional.get();
+			ProductDto productDto = ProductDto.toDto(product);
+			productDto.setProductName("수정 테스트완료");
+			ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
+			System.out.println(updatedProductDto);
+		}
 	}
 	// 제목키워드로 검색[성공]
 //	@Test

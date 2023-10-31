@@ -91,10 +91,9 @@ public interface ProductService{
 //	public void deleteProduct2(Long productNo);
 	
 	/******************** DELETE[DTO] ********************/
-	// product 삭제 - DTO[성공]
-	ProductDto deledtProductDto(Long productNo) throws Exception;
+	// product 삭제 - DTO[성공햇다 실패됨]
+//	ProductDto deledtProductDto(Long productNo) throws Exception;
 	
-	GoodsDto deledtGoodsDto(Long productNo) throws Exception;
 	/*********************************************/
 	
 	/******************** UPDATE[ENTITY] ********************/	

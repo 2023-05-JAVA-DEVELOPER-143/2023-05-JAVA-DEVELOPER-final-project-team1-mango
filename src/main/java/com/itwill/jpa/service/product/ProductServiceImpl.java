@@ -246,25 +246,18 @@ public class ProductServiceImpl implements ProductService{
 //	}
 /******************** DELETE[DTO] ********************/	
 	  
-		// product 삭제 - DTO[성공]
-		@Override
-		public ProductDto deledtProductDto(Long productNo) throws Exception {
-			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
-			productRepository.deleteById(productNo);
-			ProductDto productDto = ProductDto.toDto(product);
-			return productDto;
-		}		
-		// product 삭제 - DTO[성공]
-		@Override
-		public GoodsDto deledtGoodsDto(Long productNo) throws Exception {
-			Goods goods = (Goods) productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
-			productRepository.deleteById(productNo);
-			GoodsDto goodsDto = GoodsDto.toDto(goods);
-			return goodsDto;
-		}		
+		// product 삭제 - DTO[성공햇다가 실패됨]
+//		@Override
+//		public ProductDto deledtProductDto(Long productNo) throws Exception {
+//			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
+//			productRepository.deleteByProductNo(productNo);
+//			productRepository.deleteById(productNo);
+//			ProductDto productDto = ProductDto.toDto(product);
+//			return productDto;
+//		}		
 		/*********************************************/
 		
-/******************** UPDATE[ENTITY] ********************/		
+/******************** UPDATE[ENTITY] ********************/
 	//product 수정[성공]
 	@Override
 	public Product updateProduct(Product product) {
