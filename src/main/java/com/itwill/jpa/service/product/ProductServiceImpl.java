@@ -274,17 +274,16 @@ public class ProductServiceImpl implements ProductService{
 	
 /******************** UPDATE[DTO] ********************/	
 	// product 수정 - DTO
+	@Transactional
 	@Override
 	public ProductDto updateProductDto(ProductDto dto) throws Exception {
-	    if (dto == null || dto.getProductNo() == null) {
-	        throw new IllegalArgumentException("잘못된 ProductDto입니다.");
-	    }
-		Product product = productDao.updateProduct(Product.toEntity(dto));
-		ProductDto productDto = ProductDto.toDto(product);
-		return productDto;
+	    Product product = productDao.updateProduct(Product.toEntity(dto));
+	    ProductDto productDto = ProductDto.toDto(product);
+	    return productDto;
 	}
 
 	// goods 수정 - DTO
+	@Transactional
 	@Override
 	public GoodsDto updateGoodsDto(GoodsDto dto) throws Exception {
 		Goods goods = productDao.updateGoods(Goods.toEntity(dto));
@@ -319,22 +318,24 @@ public class ProductServiceImpl implements ProductService{
 /******************** INCREASE READCOUNT[DTO] ********************/
 	@Override
 	public ProductDto increaseProductReadCountDto(ProductDto productDto) throws Exception {
-        // 현재 조회수를 가져와서 1 증가
-        Long currentReadCount = productDto.getReadCount();
-        Long newReadCount = currentReadCount + 1L; // 1을 Long으로 캐스팅해서 증가
-        
-        // ProductDto를 Product 엔티티로 변환
-        Product product = Product.toEntity(productDto);       
-        
-        // 증가된 조회수를 엔티티에 설정
-        productDto.setReadCount(newReadCount);
-        
-        // 엔티티를 저장하고 반환
-        Product updatedProduct = productRepository.save(product);
-        
-        // 업데이트된 엔티티를 저장하고 반환
-        return ProductDto.toDto(updatedProduct);
-	}
+		return null;
+//        // 주어진 productDto에서 productNo를 가져옵니다.
+//        Long productNo = productDto.getProductNo();
+//        // productNo를 이용하여 해당 엔티티를 데이터베이스에서 찾습니다.
+//        Product product = productRepository.findById(productNo);
+//
+//        if (product != null) {
+//            // 조회수를 1 증가시킵니다.
+//            product.setReadCount(product.getReadCount() + 1);
+//            // 변경된 엔티티를 저장합니다.
+//            productRepository.save(product);
+//
+//            // 엔티티를 DTO로 변환하여 반환합니다.
+//            return ProductDto.toDto(product);
+//        } else {
+//            throw new Exception("해당 productNo에 해당하는 제품을 찾을 수 없습니다.");
+//        }
+    }
 		
 	// goods 조회수 올리기 - DTO	
 	@Override

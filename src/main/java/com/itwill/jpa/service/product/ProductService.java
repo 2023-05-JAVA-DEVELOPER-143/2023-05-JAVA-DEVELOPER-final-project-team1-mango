@@ -55,13 +55,13 @@ public interface ProductService{
 	// goods 등록[성공]
 	public Goods insertGoods(Goods goods);
 	
-	// goods 등록 - DTO
+	// goods 등록 - DTO[성공]
 	GoodsDto insertGoodsDto(GoodsDto goodsDto);
 	
 	// ticket 등록[성공]
 	public Ticket insertTicket(Ticket ticket);
 	
-	// ticket 등록 - DTO	
+	// ticket 등록 - DTO[성공]	
 	TicketDto insertTicketDto(TicketDto ticketDto);
 	
 	// membership 등록[성공]

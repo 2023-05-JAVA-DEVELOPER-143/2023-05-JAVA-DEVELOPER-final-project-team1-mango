@@ -24,6 +24,8 @@ import com.itwill.jpa.entity.product.ProductCategory;
 import com.itwill.jpa.entity.product.Product.Music;
 import com.itwill.jpa.repository.product.ProductRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @SpringBootTest
 class ProductServiceImplTest {
 	
@@ -31,7 +33,7 @@ class ProductServiceImplTest {
 	ProductServiceImpl productServiceImpl;
 
 	@Autowired
-	private ProductRepository productRepository;
+	ProductRepository productRepository;
 
 	
 	
@@ -85,7 +87,7 @@ class ProductServiceImplTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-	@Disabled
+//	@Disabled
 	void testFindProductByCategoryId() {
 		List<ProductDto> productDtoList = productServiceImpl.findByProductCategoryId(3L);	
 		System.out.println("프로덕트리스트" + productDtoList);
@@ -102,9 +104,7 @@ class ProductServiceImplTest {
 		System.out.println("굿즈리스트" + ticketDtoList);
 	}		
 	
-	
 	// InsertProduct는 dType이 product로 되기때문에 사용 x
-
 	// music 추가[성공]
 	@Test
 	@Transactional
@@ -213,18 +213,14 @@ class ProductServiceImplTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-	@Disabled
+//	@Disabled
 	public void testUpdateProductDto() throws Exception {
-        Long productNo = 2L;
-        // 테스트 실행
-        ProductDto productDto = productServiceImpl.getProductDto(productNo);
-        //수정
-        productDto.setProductName("수정DTO 테스트완료");
-        productDto.setProductArtist("가수 수정");
-        // updateProductDto 메서드 호출        	
-        ProductDto updateProductDto = productServiceImpl.updateProductDto(productDto);
-        }
-	
+//		Product product = productRepository.findById(2L);
+//		ProductDto productDto = ProductDto.toDto(product);
+//		productDto.setProductName("수정 테스트완료");
+//		ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
+//		System.out.println(updatedProductDto);
+	}
 	// 제목키워드로 검색[성공]
 	@Test
 	@Transactional
@@ -280,6 +276,30 @@ class ProductServiceImplTest {
 			// 엔티티 못찾았을 경우의 예외처리
 		}
 	}
+	@Test
+	@Transactional
+	@Rollback(false)
+	@Disabled
+	public void testIncreaseProductReadCountDto() throws Exception {
+        Long productNo = 2L; // 업데이트할 상품 번호
+//        ProductDto productDto = productRepository.findByIdDto(productNo).orElse(null);
+//
+//        if (productDto != null) {
+//            Long oldReadCount = productDto.getReadCount();
+//            
+//            // increaseProductReadCountDto 메서드 호출
+//            productDto = productServiceImpl.increaseProductReadCountDto(productDto);
+//
+//            // 변경된 객체를 저장하지 않고, 값이 실제로 증가했는지 확인
+//            Long updatedReadCount = productDto.getReadCount();
+//            assertEquals(oldReadCount + 1, updatedReadCount);
+//
+//            // 이후, 엔티티를 저장할 필요 없음
+//        } else {
+//            // 엔티티를 찾지 못한 경우에 대한 예외 처리
+//            throw new EntityNotFoundException("해당 프로덕트가 존재하지 않습니다: " + productNo);
+//        }
+    }
 //    @Test
 //    public void testIncreaseProductReadCountDto() {
 //    	ProductDto productOptionalDto = productRepository.findByIdDto(1L);

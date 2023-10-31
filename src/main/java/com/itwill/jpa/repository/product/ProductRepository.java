@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.itwill.jpa.dto.product.GoodsDto;
@@ -43,13 +44,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	/*****************************************************************/
 //	keyword가 포함된 product 찾기
 	List<Product> findByProductNameContaining(String keyword);
-
-//	productName로 찾기
-//	Product findByProductName(String productName);
+// product readCount 증가
+    @Modifying
+    @Query("UPDATE Product p SET p.readCount = p.readCount + 1 WHERE p.productNo = :productNo")
+    void increaseReadCount(@Param("productNo") Long productNo);
 	
-//	productArtist로 찾기
-//	Product findByProductArtist(String productArtist);
-
+	
 	
 /************************ Vote관련  ***************************/	
 	// 상품에서 음악 조회수(readCount), 음악 별점(productStar)의 합산해서 Top 20명 추출
