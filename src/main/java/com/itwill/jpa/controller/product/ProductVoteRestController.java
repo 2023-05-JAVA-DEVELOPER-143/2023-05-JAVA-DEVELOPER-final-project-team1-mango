@@ -35,5 +35,6 @@ public class ProductVoteRestController {
 		 Product product = productVoteServiceImple.findByVoteVoteId(vote.getVoteId());
 		 ProductVoteDto selectVote = ProductVoteDto.toDto(product);
 		 return ResponseEntity.status(HttpStatus.OK).body(selectVote);
+		 
 	}
 }
