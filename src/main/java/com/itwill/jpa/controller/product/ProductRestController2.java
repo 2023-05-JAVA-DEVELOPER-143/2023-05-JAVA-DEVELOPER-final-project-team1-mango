@@ -37,11 +37,11 @@ public class ProductRestController2 {
 	
 	//detail 별로 rest파일 분리 필요? -> 각 카테고리 별로 dto 묶어서 작업...maybe
 	
-	@PostMapping("/music/create")
-	public ResponseEntity<Product> createMusic(@RequestBody Product product){
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(productService.insertProduct(product));
-	}
+//	@PostMapping("/music/create")
+//	public ResponseEntity<Product> createMusic(@RequestBody Product product){
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//				.body(productService.insertProduct(product));
+//	}
 	
 
 	@PutMapping("/update")
