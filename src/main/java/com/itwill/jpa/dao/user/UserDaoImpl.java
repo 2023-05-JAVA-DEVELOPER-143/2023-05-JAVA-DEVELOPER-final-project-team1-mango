@@ -17,11 +17,23 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User createUser(User user) {
-		
 		User createdUser = userRepository.save(user);
 		return createdUser;
 	}
 	
+	@Override
+	public User loginUser(String userId, String userPw) throws Exception {
+		Optional<User> selectedUserOptional = userRepository.findById(userId);
+
+	    if (selectedUserOptional.isPresent()) {
+	        User selectedUser = selectedUserOptional.get();
+	        if (selectedUser.getUserPw().equals(userPw)) {
+	            return selectedUser;
+	        }
+	    }
+	    return null;
+	}
+
 	@Override
 	public User updateUser(User user) {
 		User updatedUser = userRepository.save(user);
@@ -30,7 +42,8 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public void deleteUser(String userId) throws Exception {
-		userRepository.deleteById(userId);
+		Optional<User> selectedUserOptional = userRepository.findById(userId);
+		userRepository.delete(selectedUserOptional.get());
 	}
 
 	@Override

@@ -44,29 +44,40 @@ public class ProductServiceImpl implements ProductService{
 	public Product getProduct(Long productNo) {
 		return productRepository.findById(productNo).get();
 	}
-	@Override
-	public ProductDto getProductDto(Long productNo) {
-		return productRepository.findByIdDto(productNo).get();
-	}
+//	@Override
+//	public ProductDto getProductDto(Long productNo) {
+//		return productRepository.findByIdDto(productNo).get();
+//	}
 	
 	// categoryId값 가져오기	
 	@Override	
 	public List<Product> getProductsByCategory(Long categoryId) {
 		return productRepository.findByProductCategoryId(categoryId);
 	}
-	
-	
+//	@Override
+//	public List<ProductDto> getProductsByCategorysDtos(Long categoryId) {
+//		return productRepository.findBy;
+//	}
+	@Override
+	public List<Product> productList() {
+		return productRepository.findAll();
+	}
 	/*
 	 * @Override public Product saveProduct(Product product) { return
 	 * productRepository.save(product); }
 	 */
 	
-	
+	//전체 product 출력[DTO]
 	@Override
-	public List<Product> productList() {
-		return productRepository.findAll();
+	public List<ProductDto> productDtoList() {
+		List<Product> productList = productRepository.findAll();
+		List<ProductDto> productDtoList = new ArrayList<ProductDto>();
+		for(Product product : productList) {
+			productDtoList.add(ProductDto.toDto(product));
+		}
+		return productDtoList;
 	}
-	
+		
 	// 좋아요 누르기 기능[성공]
 	@Override
 	public Long checkLikeService(Long productNo) {
@@ -119,10 +130,10 @@ public class ProductServiceImpl implements ProductService{
 /******************** categoryId별로 전체나열[ENTITY] ********************/
 	
 	// product 카테고리별 구분[성공]
-	@Override
-	public List<Product> findByProductCategory(ProductCategory categoryId) {
-		return productRepository.findByProductCategory(categoryId);
-	}
+//	@Override
+//	public List<Product> findByProductCategory(ProductCategory categoryId) {
+//		return productRepository.findByProductCategory(categoryId);
+//	}
 /*************************************************************************/	
 	@Override
 	public List<Product> findByCategoryId(Long categoryId) {
@@ -167,10 +178,10 @@ public class ProductServiceImpl implements ProductService{
     }
 /******************** insert[ENTITY] ********************/	
 	//product 추가[성공]
-	@Override
-	public Product insertProduct(Product product) {
-		return productRepository.save(product);
-	}
+//	@Override
+//	public Product insertProduct(Product product) {
+//		return productRepository.save(product);
+//	}
 	
 	//music 추가[성공]
 	@Override
@@ -219,33 +230,34 @@ public class ProductServiceImpl implements ProductService{
 		productRepository.deleteById(productNo);
 		
 	}
-	
-	//product 삭제[성공]
-	
-	  @Override
-	  public void deleteProduct2(Long productNo) { 
-		  Optional<Product> productOptional = productRepository.findById(productNo);
-	  if(productOptional.isPresent()) { 
-		  Product product = productOptional.get();
-		  productRepository.delete(product); //product 객체 있으면 꺼내서 삭제
-		  }else {	  
-	  //예외처리
-	  }
-		
-	}
+//	
+//	//product 삭제[성공]
+//	
+//	  @Override
+//	  public void deleteProduct2(Long productNo) { 
+//		  Optional<Product> productOptional = productRepository.findById(productNo);
+//	  if(productOptional.isPresent()) { 
+//		  Product product = productOptional.get();
+//		  productRepository.delete(product); //product 객체 있으면 꺼내서 삭제
+//		  }else {	  
+//	  //예외처리
+//	  }
+//		
+//	}
 /******************** DELETE[DTO] ********************/	
 	  
-		// product 삭제 - DTO[성공]
-		@Override
-		public ProductDto deledtProductDto(Long productNo) throws Exception {
-			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
-			productRepository.deleteById(productNo);
-			ProductDto productDto = ProductDto.toDto(product);
-			return productDto;
-		}		
+		// product 삭제 - DTO[성공햇다가 실패됨]
+//		@Override
+//		public ProductDto deledtProductDto(Long productNo) throws Exception {
+//			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
+//			productRepository.deleteByProductNo(productNo);
+//			productRepository.deleteById(productNo);
+//			ProductDto productDto = ProductDto.toDto(product);
+//			return productDto;
+//		}		
 		/*********************************************/
 		
-/******************** UPDATE[ENTITY] ********************/		
+/******************** UPDATE[ENTITY] ********************/
 	//product 수정[성공]
 	@Override
 	public Product updateProduct(Product product) {
@@ -274,17 +286,16 @@ public class ProductServiceImpl implements ProductService{
 	
 /******************** UPDATE[DTO] ********************/	
 	// product 수정 - DTO
+	@Transactional
 	@Override
 	public ProductDto updateProductDto(ProductDto dto) throws Exception {
-	    if (dto == null || dto.getProductNo() == null) {
-	        throw new IllegalArgumentException("잘못된 ProductDto입니다.");
-	    }
-		Product product = productDao.updateProduct(Product.toEntity(dto));
-		ProductDto productDto = ProductDto.toDto(product);
-		return productDto;
+	    Product product = productDao.updateProduct(Product.toEntity(dto));
+	    ProductDto productDto = ProductDto.toDto(product);
+	    return productDto;
 	}
 
 	// goods 수정 - DTO
+	@Transactional
 	@Override
 	public GoodsDto updateGoodsDto(GoodsDto dto) throws Exception {
 		Goods goods = productDao.updateGoods(Goods.toEntity(dto));
@@ -319,22 +330,24 @@ public class ProductServiceImpl implements ProductService{
 /******************** INCREASE READCOUNT[DTO] ********************/
 	@Override
 	public ProductDto increaseProductReadCountDto(ProductDto productDto) throws Exception {
-        // 현재 조회수를 가져와서 1 증가
-        Long currentReadCount = productDto.getReadCount();
-        Long newReadCount = currentReadCount + 1L; // 1을 Long으로 캐스팅해서 증가
-        
-        // ProductDto를 Product 엔티티로 변환
-        Product product = Product.toEntity(productDto);       
-        
-        // 증가된 조회수를 엔티티에 설정
-        productDto.setReadCount(newReadCount);
-        
-        // 엔티티를 저장하고 반환
-        Product updatedProduct = productRepository.save(product);
-        
-        // 업데이트된 엔티티를 저장하고 반환
-        return ProductDto.toDto(updatedProduct);
-	}
+		return null;
+//        // 주어진 productDto에서 productNo를 가져옵니다.
+//        Long productNo = productDto.getProductNo();
+//        // productNo를 이용하여 해당 엔티티를 데이터베이스에서 찾습니다.
+//        Product product = productRepository.findById(productNo);
+//
+//        if (product != null) {
+//            // 조회수를 1 증가시킵니다.
+//            product.setReadCount(product.getReadCount() + 1);
+//            // 변경된 엔티티를 저장합니다.
+//            productRepository.save(product);
+//
+//            // 엔티티를 DTO로 변환하여 반환합니다.
+//            return ProductDto.toDto(product);
+//        } else {
+//            throw new Exception("해당 productNo에 해당하는 제품을 찾을 수 없습니다.");
+//        }
+    }
 		
 	// goods 조회수 올리기 - DTO	
 	@Override
@@ -392,6 +405,8 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 	
 /*********************************************/	

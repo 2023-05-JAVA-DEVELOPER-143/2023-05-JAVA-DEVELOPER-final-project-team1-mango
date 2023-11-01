@@ -65,11 +65,14 @@ public class User {
 				   .build();
 	}
 	
+	
 	//1대N 관계설정
 	@ManyToOne
 	@JoinColumn(name = "vote_id")
 	@ToString.Exclude
 	private Vote vote;
+
+
 
 	// user와 order 1대N 관계설정
 	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
@@ -81,7 +84,7 @@ public class User {
 	
 	// user와 delivery 1대N 관계설정 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Delivery> deliverys = new ArrayList<>();
+	private List<Delivery> deliverys = new ArrayList<>();
 
 	// user와 board_Reply 1대N 관계설정
 	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)

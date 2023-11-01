@@ -79,7 +79,7 @@ public class OrderController {
 				System.out.println("커밋용");
 				return "order_membership";
 			} else {
-				//추후에 메인(index)페이지 대신에 로그인 페이지로 보낼예정
+				
 				return "index";
 			}
 			
@@ -89,7 +89,8 @@ public class OrderController {
 			return "index";
 		}
 	}
-			
+
+
 	
 	
 	//오더페이지를 일단 두개로 나눔 멤버쉽결제페이지 와 티켓결제페이지

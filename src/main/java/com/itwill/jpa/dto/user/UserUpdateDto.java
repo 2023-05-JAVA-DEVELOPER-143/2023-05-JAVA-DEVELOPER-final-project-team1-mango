@@ -15,20 +15,18 @@ import lombok.ToString;
 @Builder
 public class UserUpdateDto {
 	 
-	private String userId;
 	private String userPw;
 	private String userName;
 	private String userPhone;
-	private String userAddress;
+	private String userAdress;
 	private String userEmail;
-	private Long voteId;
 	
 	public static UserUpdateDto toDto(User entity) {
 		return UserUpdateDto.builder()
 							.userPw(entity.getUserPw())
 							.userName(entity.getUserName())
 							.userPhone(entity.getUserPhone())
-							.userAddress(entity.getUserAddress())
+							.userAdress(entity.getUserAddress())
 							.userEmail(entity.getUserEmail())
 							.build();
 	}

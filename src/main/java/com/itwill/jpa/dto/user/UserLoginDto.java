@@ -15,13 +15,13 @@ import lombok.ToString;
 @Builder
 public class UserLoginDto {
 
-	private String userId;
-	private String userPw;
+	private String UserId;
+	private String UserPw;
 	
 	public static UserLoginDto toDto(User entity) {
 		return UserLoginDto.builder()
-						   .userId(entity.getUserId())
-						   .userPw(entity.getUserPw())
+						   .UserId(entity.getUserId())
+						   .UserPw(entity.getUserPw())
 						   .build();
 	}
 	

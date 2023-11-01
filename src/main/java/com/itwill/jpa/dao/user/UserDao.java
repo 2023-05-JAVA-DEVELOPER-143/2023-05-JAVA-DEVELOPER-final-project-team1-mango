@@ -8,6 +8,8 @@ public interface UserDao {
 
 	User createUser(User user);
 	
+	User loginUser(String userId, String userPw) throws Exception;
+
     User updateUser(User user) throws Exception;
 
     void deleteUser(String userId) throws Exception;

@@ -35,18 +35,26 @@ public class CartItemServiceImpl implements CartItemService {
 	ProductDao productDao;
 	@Autowired
 	CartDao cartDao;
-
+	
 	@Override
 	public CartItemDto insert(CartItemDto dto) throws Exception {
-		Product product = productDao.selectProduct(dto.getProductId());
-		Cart cart = cartDao.findByCartId(dto.getCartId());
-		CartItem cartItem = new CartItem();
-		cartItem.setCartItemQty(dto.getCartItemQty());
-		cartItem.setProduct(product);
+	    Product product = productDao.selectProduct(dto.getProductId());
+	    Cart cart = cartDao.findByCartId(dto.getCartId());
+	    CartItem cartItem = new CartItem();
+	    cartItem.setCartItemQty(dto.getCartItemQty());
+	    cartItem.setProduct(product); 
+	    cartItem.setCart(cart);
+	    cartItem = cartItemRepository.save(cartItem);
+	    return CartItemDto.toDto(cartItem);
+		/*
+		Product product = productRepository.findById(dto.getProduct().getProductNo()).orElse(null);
+		Cart cart = cartRepository.findById(dto.getCartId()).orElse(null);
+		CartItem cartItem = CartItem.toEntity(dto);
 		cartItem.setCart(cart);
-		cartItem = cartItemRepository.save(cartItem);
+		cartItem.setProduct(product);
+		cartItem=cartItemRepository.save(cartItem);
 		return CartItemDto.toDto(cartItem);
-
+		*/
 	}
 
 	@Override
@@ -58,7 +66,7 @@ public class CartItemServiceImpl implements CartItemService {
 			cartItem.setCartItemQty(qty);
 			updatedCart = cartItemRepository.save(cartItem);
 			return CartItemDto.toDto(updatedCart);
-		} else {
+		}else {
 			throw new Exception("존재하지 않는 장바구니입니다.");
 		}
 	}
@@ -69,7 +77,7 @@ public class CartItemServiceImpl implements CartItemService {
 	}
 
 	@Override
-	public List<CartItemDto> findAllByCartId(Long CartId) {
+	public List<CartItemDto> findAll() {
 	    List<CartItem> cartItems = cartItemRepository.findAll();
 	    List<CartItemDto> cartItemDtos = new ArrayList<>();
 
@@ -78,15 +86,14 @@ public class CartItemServiceImpl implements CartItemService {
 	    	cartItemDto.setCartItemId(cartItem.getCartItemId());
 	    	cartItemDto.setCartItemQty(cartItemDto.getCartItemQty());
 	    	cartItemDto.setCartId(cartItemDto.getCartId());
-	    	cartItemDto.setProductId(ProductDto.toDto(cartItem.getProduct()).getProductNo());
-	    	
-	    	cartItemDtos.add(cartItemDto);
+	    	//cartItemDto.setProductId(ProductDto.toDto(cartItem.getProduct()).getProductNo());
 	    
 	    }
 
 	    return cartItemDtos;
 	}
-
+	
+	
 	/*
 	@Override
 	public List<CartItem> insertAll(List<CartItem> cartItems) throws Exception {

@@ -54,38 +54,24 @@ public class CartServiceImpl implements CartService {
 		CartDto cartDto = CartDto.toDto(cart);
 		return cartDto;
 	}
-
 	@Override
-	public CartDto calculateTotalPrice(Long cartId) throws Exception {
-        // 1. cartId를 이용하여 장바구니 정보를 불러온다.
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new Exception("장바구니를 찾을 수 없습니다."));
+	public CartDto calculateTotalPrice(List<CartItemDto> cartItemDtos) throws Exception {
+	       int totPrice = 0;
+	        for (CartItemDto cartItemDto : cartItemDtos) {
+	            Long productId = cartItemDto.getProductId();
+	            Product product = productRepository.findById(productId).orElse(null);
+	            ProductDto productDto = ProductDto.toDto(product);
+	            int qty = cartItemDto.getCartItemQty();
+	            if (productDto != null) {
+	                int productPrice = productDto.getProductPrice();
+	                totPrice += productPrice * qty;
+	            }
+	        }
+	        CartDto cartDto = new CartDto();
+	        cartDto.setCartTotPrice(totPrice);
 
-        // 2. 장바구니 내의 상품들의 총 가격을 계산한다.
-        int totalPrice = 0;
-        for (CartItem cartItem : cart.getCartitems()) {
-            totalPrice += cartItem.getProduct().getProductPrice() * cartItem.getCartItemQty();
-        }
-
-        // 3. CartDto 객체에 결과를 담아서 반환한다.
-        CartDto cartDto = new CartDto();
-        cartDto.setCartId(cart.getCartId());
-        cartDto.setCartTotPrice(totalPrice);
-        cart.setCartTotPrice(totalPrice);
-        cartRepository.save(cart);
-        return cartDto;
-    }
-	
-	@Override
-	public CartDto findCartByCartId(Long cartId) throws Exception {
-		Optional<Cart> findCart = cartRepository.findById(cartId);
-		if (findCart.isPresent()) {
-			Cart cart = findCart.get();
-			return CartDto.toDto(cart);
-		} else { 
-			throw new Exception("해당 카트를 찾을 수 없습니다.");
-		}
-	}
-	
+	        return cartDto;
+	    }
 	/*
 	@Override
 	public CartDto getCartItems(List<CartItemDto> cartItemDtos) throws Exception {
@@ -113,7 +99,7 @@ public class CartServiceImpl implements CartService {
 		return null;
 	}
 	*/
-
+	
 	/*
 	// 장바구니 생성
 	@Override
