@@ -41,6 +41,9 @@ public interface ProductService{
 	//전체 product 출력[DTO]	
 	List<ProductDto> productDtoList();
 	
+    // 카테고리 ID를 사용하여 상품 조회 메서드
+	List<ProductDto> getProductsByCategoryDto(Long categoryId);
+	
 //ProductCategory//		
     void saveProductCategory(ProductCategoryDto productCategoryDto);
 	
@@ -92,7 +95,7 @@ public interface ProductService{
 	
 	/******************** DELETE[DTO] ********************/
 	// product 삭제 - DTO[성공햇다 실패됨]
-//	ProductDto deledtProductDto(Long productNo) throws Exception;
+	ProductDto deledtProductDto(Long productNo) throws Exception;
 	
 	/*********************************************/
 	
@@ -129,11 +132,8 @@ public interface ProductService{
 	public List<Product> getProductOrderByReadCountDesc();
 	
 	/******************** 내림차순[DTO] ********************/		
-	// ticket 조회수별 내림차순 정렬 - DTO	
-	GoodsDto GoodsByReadCountDescDto(GoodsDto goodsDto) throws Exception;
-	
-	// ticket 조회수별 내림차순 정렬 - DTO	
-	TicketDto TicketByReadCountDescDto(TicketDto ticketDto) throws Exception;
+	// product 조회수별 내림차순 정렬 - DTO	[성공]
+	List<ProductDto> productByReadCountDescDto(Long categoryId) throws Exception;
 	
 	/*********************************************/	
 	
@@ -142,11 +142,9 @@ public interface ProductService{
 	public List<Product> getProductOrderByReadCountAsc();
 	
 	/******************** 오름차순[DTO] ********************/		
-	// ticket 조회수별 내림차순 정렬 - DTO	
-	GoodsDto GoodsByReadCountAscDto(GoodsDto goodsDto) throws Exception;
+	// product 조회수별 내림차순 정렬 - DTO	[성공]
+	List<ProductDto> productByReadCountAscDto(Long categoryId) throws Exception;
 	
-	// ticket 조회수별 내림차순 정렬 - DTO	
-	TicketDto TicketByReadCountAscDto(TicketDto ticketDto) throws Exception;
 	/*********************************************/	
 	
 	/******************** 키워드로 검색[ENTITY] ********************/	

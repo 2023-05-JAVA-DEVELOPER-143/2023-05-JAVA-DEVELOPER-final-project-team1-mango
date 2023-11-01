@@ -1,6 +1,7 @@
 package com.itwill.jpa.service.product;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,14 +96,14 @@ class ProductServiceImplTest {
 	// 카테고리별 구분-DTO로 받기[성공]
 	// 굿즈 categoryId의 값만 가져올 수 잇음 (categoruId 다르면 null값 받아옴)
 	// 출력되는 값 FindProductByCategoryId와 차이 없으면 삭제 예정
-//	@Test
-//	@Transactional
-//	@Rollback(false)
-//	@Disabled
-//	void testFindGoodsByCategoryId() {
-//		List<TicketDto> ticketDtoList = productServiceImpl.findTicketByCategoryId(1L);
-//		System.out.println("굿즈리스트" + ticketDtoList);
-//	}		
+	@Test
+	@Transactional
+	@Rollback(false)
+	@Disabled
+	void testFindGoodsByCategoryId() {
+		List<TicketDto> ticketDtoList = productServiceImpl.findTicketByCategoryId(1L);
+		System.out.println("굿즈리스트" + ticketDtoList);
+	}		
 	
 	// InsertProduct는 dType이 product로 되기때문에 사용 x
 	// music 추가[성공]
@@ -188,14 +189,27 @@ class ProductServiceImplTest {
 //		  productServiceImpl.deleteProduct2(productNo);	  
 //	  }
 	// product 삭제 - DTO로 받기[성공햇다 실패]
-//		@Test
-//		@Transactional
-//		@Rollback(false)
-//		@Disabled	 
-//		void testDeledtProductDto() throws Exception {
+		@Test
+		@Transactional
+		@Rollback(false)
+		@Disabled	 
+		void testDeledtProductDto() throws Exception {
+			productServiceImpl.deledtProductDto(2L);
 //			Long productNo = 2L;
-//			productServiceImpl.deledtProductDto(productNo);
-//		}
+//		       try {
+//		            ProductDto deletedProductDto = productServiceImpl.deledtProductDto(productNo);
+//
+//		            if (deletedProductDto != null) {
+//		                // 삭제된 제품의 정보를 출력하거나 필요한 작업을 수행하세요
+//		                System.out.println("삭제된 제품 정보: " + deletedProductDto);
+//		            } else {
+//		                System.out.println("제품을 삭제할 수 없음.");
+//		            }
+//		        } catch (Exception e) {
+//		            // 삭제 중 예외가 발생한 경우에 대한 예외 처리 코드를 추가하세요
+//		            System.out.println("제품 삭제 중 오류 발생: " + e.getMessage());
+//		        }
+		}
 
 	  
 	// product 수정[성공]
@@ -215,17 +229,23 @@ class ProductServiceImplTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-//	@Disabled
+	@Disabled
 	public void testUpdateProductDto() throws Exception {
-        Long existingProductId = 2L;
-		Optional<Product> productOptional = productRepository.findById(existingProductId);
-		if(productOptional.isPresent()) {
-			Product product = productOptional.get();
-			ProductDto productDto = ProductDto.toDto(product);
-			productDto.setProductName("수정 테스트완료");
-			ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
-			System.out.println(updatedProductDto);
-		}
+		Product product = productRepository.findById(2L).get();
+		ProductDto productDto = ProductDto.toDto(product);
+		productDto.setProductName("수정완료");
+		ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
+		System.out.println(updatedProductDto.getProductName());
+//        Long existingProductId = 2L;
+//		Optional<Product> productOptional = productRepository.findById(existingProductId);
+//		if(productOptional.isPresent()) {
+//			Product product = productOptional.get();
+//			ProductDto productDto = ProductDto.toDto(product);
+//			productDto.setProductName("수정 테스트완료");
+//			ProductDto updatedProductDto = productServiceImpl.updateProductDto(productDto);
+//			productRepository.save(updatedProductDto);
+//			System.out.println(updatedProductDto.getProductName());
+//		}
 	}
 	// 제목키워드로 검색[성공]
 //	@Test
@@ -250,7 +270,19 @@ class ProductServiceImplTest {
 //					"Product Name : " + product.getProductName() + "///Read Count : " + product.getReadCount());
 //		}
 //	}
-
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+////	@Disabled
+//	    public void testProductByReadCountDescDto() throws Exception {
+//	    ProductDto productDto = new ProductDto();
+//        // 테스트할 메서드 호출
+//        List<ProductDto> productList = productServiceImpl.productByReadCountDescDto(productDto);
+//        for(ProductDto product : productList) {
+//        	System.out.println(
+//        			"Product Name : " + productDto.getProductName() + "///Read Count : " + productDto.getReadCount());
+//        }
+//	}
 	// product 조회수별 오름차순 정렬[성공]
 //	@Test
 //	@Transactional
@@ -263,7 +295,34 @@ class ProductServiceImplTest {
 //					"Product Name : " + product.getProductName() + "///Read Count : " + product.getReadCount());
 //		}
 //	}
-
+	// product 조회수별 오름차순 정렬[DTO][성공]	
+    @Test
+	@Transactional
+	@Rollback(false)
+	@Disabled
+    public void testProductByReadCountDescDto() throws Exception {
+        Long categoryId = 2L; // 테스트하려는 categoryId
+        // 테스트할 내용
+        List<ProductDto> productDtos = productServiceImpl.productByReadCountDescDto(categoryId);
+        for (ProductDto product : productDtos) {
+			System.out.println(
+					"Product Name : " + product.getProductName() + "///Read Count : " + product.getReadCount());
+			}
+    }
+	// product 조회수별 내림차순 정렬[DTO][성공]
+    @Test
+	@Transactional
+	@Rollback(false)
+//	@Disabled
+    public void testProductByReadCountAscDto() throws Exception {
+        Long categoryId = 2L; // 테스트하려는 categoryId
+        // 테스트할 내용
+        List<ProductDto> productDtos = productServiceImpl.productByReadCountAscDto(categoryId);
+        for (ProductDto product : productDtos) {
+			System.out.println(
+					"Product Name : " + product.getProductName() + "///Read Count : " + product.getReadCount());
+			}
+    }   
 	// product 조회수 올리기[성공]
 	@Test
 	@Transactional
@@ -282,35 +341,23 @@ class ProductServiceImplTest {
 			// 엔티티 못찾았을 경우의 예외처리
 		}
 	}
-	@Test
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	public void testIncreaseProductReadCountDto() throws Exception {
-        Long productNo = 2L; // 업데이트할 상품 번호
-//        ProductDto productDto = productRepository.findByIdDto(productNo).orElse(null);
+	// product 조회수 올리기[실패]	
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+//	@Disabled
+//	public void testIncreaseProductReadCountDto() throws Exception {
+//        // Given: 테스트용 Product 엔티티를 생성하고 데이터베이스에 저장
+//        Product product = new Product();
+//        product.setProductNo(2L);
+//        productRepository.save(product);
+//        // When: increaseProductReadCountDto 메서드를 호출
+//        ProductDto productDto = new ProductDto();
+//        productDto.setProductNo(2L);
+//        ProductDto updatedProductDto = productServiceImpl.increaseProductReadCountDto(productDto);
 //
-//        if (productDto != null) {
-//            Long oldReadCount = productDto.getReadCount();
-//            
-//            // increaseProductReadCountDto 메서드 호출
-//            productDto = productServiceImpl.increaseProductReadCountDto(productDto);
-//
-//            // 변경된 객체를 저장하지 않고, 값이 실제로 증가했는지 확인
-//            Long updatedReadCount = productDto.getReadCount();
-//            assertEquals(oldReadCount + 1, updatedReadCount);
-//
-//            // 이후, 엔티티를 저장할 필요 없음
-//        } else {
-//            // 엔티티를 찾지 못한 경우에 대한 예외 처리
-//            throw new EntityNotFoundException("해당 프로덕트가 존재하지 않습니다: " + productNo);
-//        }
-    }
-//    @Test
-//    public void testIncreaseProductReadCountDto() {
-//    	ProductDto productOptionalDto = productRepository.findByIdDto(1L);
-//    	if(productOptionalDto.isPresent())
 //    }
+
 	
 	/******************* 진행중 *******************/
 //	// productName 찾기

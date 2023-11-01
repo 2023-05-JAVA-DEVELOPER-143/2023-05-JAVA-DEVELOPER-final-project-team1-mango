@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,25 +22,26 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
 	List<Product> findAll();
-
+//	List<Goods> findAllGoods(Sort sort);
 // productNo로 찾기
-Optional<Product> findById(Long productNo);
+//Optional<Product> findById(Long productNo);
 //	Optional<Product> findByIdc
 
 // productNo로 찾기[DTO]	
-	@Query("SELECT p FROM Product p WHERE p.productNo = :productNo")
-	Optional<ProductDto> findByIdDto(@Param("productNo") Long productNo);
+//	@Query("SELECT p FROM Product p WHERE p.productNo = :productNo")
+//	Optional<ProductDto> findByIdDto(@Param("productNo") Long productNo);
 //	ProductDto findByIdDto( Long productNo);
 
-//	ProductDto save(ProductDto productDto);
+	ProductDto save(ProductDto productDto);
 
 	/******************** categoryId별로 전체나열 ********************/
 //	category로 찾기
 	List<Product> findByProductCategory(ProductCategory category);
 
-	@Query("SELECT p FROM Product p WHERE p.productCategory.id = :categoryId")
-	List<Product> findByProductCategoryId(@Param("categoryId") Long categoryId);
-
+//	@Query("SELECT p FROM Product p WHERE p.productCategory.id = :categoryId")
+//	List<Product> findByProductCategoryId(@Param("categoryId") Long categoryId);
+	List<Product> findByProductCategoryCategoryId(Long categoryId);
+	List<Product> findByProductCategoryCategoryIdOrderByReadCount(Long categoryId);
 
 	List<Goods> findGoodsByProductCategory(ProductCategory category);
 
@@ -76,6 +78,9 @@ Optional<Product> findById(Long productNo);
 
 	// voteID로 상품검색 후 상품 리스트 가져오기
 	 Product findByVoteVoteId(Long voteId);
+
+
+
 	
 
 }

@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService{
 	// categoryId값 가져오기	
 	@Override	
 	public List<Product> getProductsByCategory(Long categoryId) {
-		return productRepository.findByProductCategoryId(categoryId);
+		return productRepository.findByProductCategoryCategoryId(categoryId);
 	}
 //	@Override
 //	public List<ProductDto> getProductsByCategorysDtos(Long categoryId) {
@@ -137,7 +137,7 @@ public class ProductServiceImpl implements ProductService{
 /*************************************************************************/	
 	@Override
 	public List<Product> findByCategoryId(Long categoryId) {
-		return productRepository.findByProductCategoryId(categoryId);
+		return productRepository.findByProductCategoryCategoryId(categoryId);
 	}
 /******************** categoryId별로 전체나열[DTO] ********************/
 		
@@ -247,14 +247,14 @@ public class ProductServiceImpl implements ProductService{
 /******************** DELETE[DTO] ********************/	
 	  
 		// product 삭제 - DTO[성공햇다가 실패됨]
-//		@Override
-//		public ProductDto deledtProductDto(Long productNo) throws Exception {
-//			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
-//			productRepository.deleteByProductNo(productNo);
-//			productRepository.deleteById(productNo);
-//			ProductDto productDto = ProductDto.toDto(product);
-//			return productDto;
-//		}		
+		@Override
+		public ProductDto deledtProductDto(Long productNo) throws Exception {
+			Product product = productRepository.findById(productNo).orElseThrow(() -> new IllegalArgumentException("제품이 존재하지 않습니다."));
+			productRepository.deleteByProductNo(productNo);
+			productRepository.deleteById(productNo);
+			ProductDto productDto = ProductDto.toDto(product);
+			return productDto;
+		}		
 		/*********************************************/
 		
 /******************** UPDATE[ENTITY] ********************/
@@ -283,17 +283,48 @@ public class ProductServiceImpl implements ProductService{
 			throw new EntityNotFoundException("제품을 찾을 수 없습니다.");
 		}
 	}
+/*********************************************/	
 	
+	// Product를 ProductDto로 변환하는 메서드	
+	private ProductDto convertProductToProductDto(Product product) {
+		// Product 엔티티의 필드 값을 ProductDto로 복사
+		ProductDto productDto = new ProductDto();
+		productDto.setProductNo(product.getProductNo());
+		productDto.setProductName(product.getProductName());
+		// 나머지 필드 복사
+		return productDto;
+	}
 /******************** UPDATE[DTO] ********************/	
-	// product 수정 - DTO
+	// product 수정 - DTO[실패]
 	@Transactional
 	@Override
 	public ProductDto updateProductDto(ProductDto dto) throws Exception {
 	    Product product = productDao.updateProduct(Product.toEntity(dto));
 	    ProductDto productDto = ProductDto.toDto(product);
 	    return productDto;
+//        Long productNo = dto.getProductNo();
+//        
+//        // 유효성 검사: productNo가 null 또는 0보다 작으면 예외 처리
+//        if (productNo == null || productNo <= 0) {
+//        	System.out.println("실패란다.");
+//    //        throw new IllegalArgumentException("productNo must not be null or less than or equal to 0");
+//        }
+//        // productNo를 사용하여 Product 엔티티를 찾음
+//        Optional<Product> productOptional = productRepository.findById(productNo);
+//        if (productOptional.isPresent()) {
+//            // Product 엔티티를 찾은 경우, 업데이트 작업 수행
+//            Product product = productOptional.get();
+//            // productDto의 정보를 사용하여 product 엔티티 업데이트
+//            Product updatedProduct = productRepository.save(product);         
+//            // Product를 ProductDto로 변환하여 반환
+//            ProductDto updatedProductDto = convertProductToProductDto(updatedProduct);
+//            return updatedProductDto;
+//        } else {
+//            // Product 엔티티를 찾지 못한 경우 처리
+//        	System.out.println("실패란다.");
+//            throw new EntityNotFoundException("Product with productNo " + productNo + " not found");
+//        }
 	}
-
 	// goods 수정 - DTO
 	@Transactional
 	@Override
@@ -328,25 +359,26 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.save(product);
 	}
 /******************** INCREASE READCOUNT[DTO] ********************/
+	// goods 조회수 올리기 - DTO[실패]	
 	@Override
 	public ProductDto increaseProductReadCountDto(ProductDto productDto) throws Exception {
-		return null;
-//        // 주어진 productDto에서 productNo를 가져옵니다.
-//        Long productNo = productDto.getProductNo();
-//        // productNo를 이용하여 해당 엔티티를 데이터베이스에서 찾습니다.
-//        Product product = productRepository.findById(productNo);
-//
-//        if (product != null) {
-//            // 조회수를 1 증가시킵니다.
-//            product.setReadCount(product.getReadCount() + 1);
-//            // 변경된 엔티티를 저장합니다.
-//            productRepository.save(product);
-//
-//            // 엔티티를 DTO로 변환하여 반환합니다.
-//            return ProductDto.toDto(product);
-//        } else {
-//            throw new Exception("해당 productNo에 해당하는 제품을 찾을 수 없습니다.");
-//        }
+//		return null;
+        // 주어진 productDto에서 productNo를 가져옵니다.
+        Long productNo = productDto.getProductNo();
+        // productNo를 이용하여 해당 엔티티를 데이터베이스에서 찾습니다.
+        Optional<Product> productOptional = productRepository.findById(productNo);
+
+        if (productOptional.isPresent()) {
+            // 조회수를 1 증가시킵니다.
+        	Product product = productOptional.get();
+            product.setReadCount(product.getReadCount() + 1);
+            // 변경된 엔티티를 저장합니다.
+            productRepository.save(product);
+            // 엔티티를 DTO로 변환하여 반환합니다.
+            return ProductDto.toDto(product);
+        } else {
+            throw new Exception("해당 productNo에 해당하는 제품을 찾을 수 없습니다.");
+        }
     }
 		
 	// goods 조회수 올리기 - DTO	
@@ -363,7 +395,13 @@ public class ProductServiceImpl implements ProductService{
 		
 		return null;
 	}
-	
+    // 카테고리 ID를 사용하여 상품 조회 - DTO
+    @Override
+    public List<ProductDto> getProductsByCategoryDto(Long categoryId) {
+        List<Product> productList = productRepository.findByProductCategoryCategoryId(categoryId);
+        List<ProductDto> productDtoList = ProductDto.toDto(productList);
+        return productDtoList;
+    }	
 /******************** 내림차순[ENTITY] ********************/
 	
 	// product 조회수별 내림차순 정렬[성공]
@@ -371,18 +409,19 @@ public class ProductServiceImpl implements ProductService{
 		Sort sort = Sort.by(Sort.Direction.DESC, "readCount");
 		return productRepository.findAll(sort);
 	}
-/******************** 내림차순[DTO] ********************/		
+	
+/******************** 내림차순[DTO][성공] ********************/		
 	@Override
-	public GoodsDto GoodsByReadCountDescDto(GoodsDto goodsDto) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductDto> productByReadCountDescDto(Long categoryId) throws Exception {
+        // 정렬 기준
+        Sort sort = Sort.by(Sort.Direction.DESC, "readCount");
+        // categoryId를 사용하여 상품을 조회하고 readCount에 따라 정렬
+        List<Product> productList = productRepository.findByProductCategoryCategoryIdOrderByReadCount(categoryId);
+        // Product를 ProductDto로 변환
+        List<ProductDto> productDtoList = ProductDto.toDto(productList);
+        return productDtoList;
 	}
 
-	@Override
-	public TicketDto TicketByReadCountDescDto(TicketDto ticketDto) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 /*********************************************/
 	
 /******************** 오름차순[ENTITY]  ********************/
@@ -395,19 +434,18 @@ public class ProductServiceImpl implements ProductService{
 	
 /******************** 오름차순[DTO] ********************/
 	@Override
-	public GoodsDto GoodsByReadCountAscDto(GoodsDto goodsDto) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductDto> productByReadCountAscDto(Long categoryId) throws Exception {
+        // 정렬 기준을 설정
+        Sort sort = Sort.by(Sort.Direction.DESC, "readCount");
+
+        // categoryId를 사용하여 상품을 조회하고 readCount에 따라 정렬
+        List<Product> productList = productRepository.findByProductCategoryCategoryIdOrderByReadCount(categoryId);
+
+        // Product를 ProductDto로 변환
+        List<ProductDto> productDtoList = ProductDto.toDto(productList);
+
+        return productDtoList;
 	}
-
-	@Override
-	public TicketDto TicketByReadCountAscDto(TicketDto ticketDto) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
 	
 /*********************************************/	
 	//제목키워드로 검색[성공]
@@ -416,6 +454,8 @@ public class ProductServiceImpl implements ProductService{
 		return productRepository.findByProductNameContaining(keyword);
 	}
 	/*==============================================================*/
+
+
 
 
 
