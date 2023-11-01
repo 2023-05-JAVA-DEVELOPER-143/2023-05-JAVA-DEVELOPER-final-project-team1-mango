@@ -76,7 +76,7 @@ public class OrderController {
 				model.addAttribute("membershipName", membershipName);
 				model.addAttribute("membershipImage", membershipImage);
 				model.addAttribute("membershipContent", membershipContent);
-				
+				System.out.println("커밋용");
 				return "order_membership";
 			} else {
 				//추후에 메인(index)페이지 대신에 로그인 페이지로 보낼예정
