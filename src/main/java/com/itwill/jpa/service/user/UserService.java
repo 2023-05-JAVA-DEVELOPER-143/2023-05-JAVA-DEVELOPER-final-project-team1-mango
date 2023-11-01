@@ -16,13 +16,13 @@ public interface UserService {
 	User loginUser(String userId, String userPw) throws Exception;
 
 	// 회원 정보 업데이트
-	UserDto updateUser(UserUpdateDto userUpdateDto) throws Exception;
+	UserUpdateDto updateUser(UserUpdateDto userUpdateDto) throws Exception;
 
 	// 회원 탈퇴
 	void deleteUser(String userId) throws Exception;
 
 	// 회원 상세 정보 조회
-	UserDto findUser(String userId) throws Exception;
+	User findUser(String userId) throws Exception;
 
 	// 전체 회원 목록 조회
 	List<UserDto> findUserList() throws Exception;
@@ -35,5 +35,6 @@ public interface UserService {
 
 	// 아이디, 번호로 비밀번호 찾기
 	String findUserPwByUserIdUserPhone(String userId, String userPhone) throws Exception;
+
 
 }

@@ -1,4 +1,3 @@
-
 package com.itwill.jpa.controller.cart;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class CartItemRestController {
 	
     @Autowired
     private CartItemService cartItemService;
-    @Operation(summary = "장바구니에 상품추가[성공]")
+    @Operation(summary = "장바구니에 상품추가")
     @PostMapping("/insert")
     public String insertCartItem(CartItemDto dto, Model model) {
     	CartItemDto insertCartItem;
@@ -31,7 +30,7 @@ public class CartItemRestController {
             return "실패";
         }
     }
-    @Operation(summary = "수량 업데이트[성공]")
+    @Operation(summary = "수량 업데이트")
     @PostMapping("/update")
     public String updateCartItem(CartItemDto dto,Model model) {
     	CartItemDto updateCartItem;
@@ -45,7 +44,7 @@ public class CartItemRestController {
 		}
     }
     
-    @Operation(summary = "상품 한개 삭제[성공]")
+    @Operation(summary = "상품 한개 삭제")
     @DeleteMapping("/cartItem/{cartItemId}")
     public String deleteCartItem(@PathVariable(value = "cartItemId") Long CartItemId) {
     	try {

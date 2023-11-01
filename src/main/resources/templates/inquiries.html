@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--[if IE 7]><html class="ie ie7 no-js" lang="en-US"><![endif]--><!--[if IE 8]><html class="ie ie8 no-js" lang="en-US"><![endif]--><!--[if !(IE 7) | !(IE 8)  ]><!-->
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head><!-- Basic need -->
@@ -14,65 +15,45 @@
 	<meta name="format-detection" content="telephone-no"><!-- CSS files -->
 	<link rel="stylesheet" href="css/plugins.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="js/jquery.js"></script>
-	<script src="js/plugins.js"></script>
-	<script src="js/plugins2.js"></script>
-	<script src="js/custom.js"></script>
-	<!--
-		
-	<script src="js/board.js"></script>
-	
-	
-	-->
-
-
-
-
-
-
 </head>
 
-<body>
+<body><!--preloading-->
 	<div th:insert="~{header :: headerFragment}">
 	</div>
 
 
 	<div class="page-single">
 		<div class="container">
-			<div class="row">c
+			<div class="row">
 				<div class="col-md-9 col-sm-12 col-xs-12">
 					<div class="topbar-filter">
 						<p class="pad-change"
 							th:text="${inquiries[0].getUser().getUserName + '님의 문의사항은 ' + inquiries.size() + '개입니다'}">
 							userName님의 문의 총 <span>N</span> 개 입니다</p>
 						<label>Sort by:</label>
-						<select id="sortSelect">
-							<option value="latest">최신순</option>
-							<option value="oldest">오래된순</option>
+						<select>
+							<option value="popularity">최신순</option>
+							<option value="popularity">오래된순</option>
 						</select>
 					</div>
 
+
 					<div class="row">
-						<div class="row" id="inquiriesContainer">
+						<div class="row">
+							<div th:each="inquiries, iterStat : *{inquiries}" th:if="${iterStat.index lt 6}">
 
-
-								<div th:each="inquiries : ${inquiries}">
-
-									<div class="ceb-item-style-2">
+								<div class="col-md-12">
+									<div class="ceb-item-style-2"><img src="images/uploads/물음표.png" alt="">
 										<div class="ceb-infor">
 											<h2>
-
 												<a href="celebritysingle.html" th:text="${inquiries.boardTitle}">로그인</a>
 											</h2>
-											<p
-												th:text="${#temporals.format(inquiries.createdTime, 'yyyy-MM-dd HH:mm:ss')}">
-												시간</p>
-
+											<p th:text="${inquiries.createdTime}">회원가입했는데 로그인이안되요...</p>
 											<p th:text="${inquiries.boardType.boardTypeTitle}">회원가입했는데 로그인이안되요...</p>
 											<span th:text="${inquiries.boardContent}"> 답변완료 </span>
 										</div>
 									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -88,14 +69,14 @@
 						<li class="icon-next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>
 					</ul>
 				</div>
-
-
+				
 				<div class="col-md-3 col-sm-12 col-xs-12">
 					<div class="sidebar">
 						<div class="sb-search sb-it">
 							<h4 class="sb-title">Search Title</h4><input type="text" placeholder="Enter keywords">
 						</div>
 
+						<!--userId가 admin일때 보이기 -->
 						<div class="searh-form">
 							<form class="form-style-1 celebrity-form" action="#">
 								<div class="row">
@@ -107,57 +88,17 @@
 
 
 						</div>
-					</div>
+				</div>
+				</div>
 				</div>
 			</div>
+		</div><!-- end of celebrity list section--><!-- footer section-->
+		<div th:insert="~{footer :: footerFragment}">
 		</div>
-	</div><!-- end of celebrity list section--><!-- footer section-->
-	<div th:insert="~{footer :: footerFragment}">
-	</div>
-
-<script>
-    $(document).ready(function () {
-        var initialData = $('#inquiriesContainer').html(); //페이지 시작할때 타임리프로 구현한 데이터 저장
-        var sortSelect = $('#sortSelect');
-        var inquiriesContainer = $('#inquiriesContainer');
-        
-        function sortItems(ascending) {  //함수정의
-            var itemList = inquiriesContainer.find('.ceb-item-style-2').toArray();
-            itemList.sort(function (a, b) {
-                var dateA = new Date($(a).find('p').eq(0).text());
-                var dateB = new Date($(b).find('p').eq(0).text());
-                return ascending ? dateA - dateB : dateB - dateA;
-            });
-
-            inquiriesContainer.empty(); 
-
-            //리스트추가
-            $.each(itemList, function (index, item) {
-                inquiriesContainer.append(item);
-            });
-        }
-
-        sortSelect.on('change', function () {
-            var selectedOption = sortSelect.val();
-            if (selectedOption === 'latest') {
-                sortItems(false); // 최신순으로 정렬
-            } else if (selectedOption === 'oldest') {
-                sortItems(true); // 오래된순으로 정렬
-            }
-        });
-
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
+		<script src="js/jquery.js"></script>
+		<script src="js/plugins.js"></script>
+		<script src="js/plugins2.js"></script>
+		<script src="js/custom.js"></script>
 </body>
 
 </html>

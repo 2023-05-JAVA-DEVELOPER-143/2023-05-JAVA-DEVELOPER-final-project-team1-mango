@@ -19,19 +19,11 @@ public class ProductVoteServiceImple implements ProductVoteService{
 	ProductDao productDao;
 	
 	
-	// 20명 선택
+	// 완료
 	@Override
 	public List<Product> findbyTop20ByTotalScore() {
 		List<Product> findTop20ByTotalScore = productRepository.findTop20ByTotalScore(); 	
 		return findTop20ByTotalScore;
-	}
-
-
-	// voteID로 상품검색 후 상품 리스트 가져오기
-	@Override
-	public Product findByVoteVoteId(Long voteId) {
-		Product findByVoteVoteId = productRepository.findByVoteVoteId(voteId);
-		return findByVoteVoteId;
 	}
 
 
