@@ -143,7 +143,7 @@ class BoardServiceImplTest extends TeamProjectMangoApplicationTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-	@Disabled
+	//@Disabled
 	void searchBoardsByKeywordTest() {
 		List<Board> boards = new ArrayList<Board>();
 		boards = boardServiceImpl.searchBoardsByKeyword("새로운");
